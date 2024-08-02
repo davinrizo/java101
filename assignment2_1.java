@@ -6,7 +6,7 @@ public class Main {
 
         // User Input: Ask the user to input a paragraph or a lengthy text.
         System.out.println("Please enter a paragraph of text:");
-        String inputText = scanner.nextLine();
+        String inputText = scanner.nextLine().toLowerCase();
 
         // Character Count
         int characterCount = inputText.length();
@@ -23,19 +23,19 @@ public class Main {
 
         // Character Frequency
         System.out.println("Please enter a character to find its frequency:");
-        char charToFind = scanner.next().charAt(0);
+        char charToFind = scanner.next().toLowerCase().charAt(0);
         int charFrequency = findCharacterFrequency(inputText, charToFind);
         System.out.println("Frequency of '" + charToFind + "': " + charFrequency);
 
         // Word Frequency
         scanner.nextLine(); // Consume newline
         System.out.println("Please enter a word to find its frequency:");
-        String wordToFind = scanner.nextLine();
-        int wordFrequency = findWordFrequency(inputText, wordToFind);
+        String wordToFind = scanner.nextLine().toLowerCase();
+        int wordFrequency = findWordFrequency(words, wordToFind);
         System.out.println("Frequency of \"" + wordToFind + "\": " + wordFrequency);
 
         // Unique Words
-        int uniqueWordCount = findUniqueWordCount(inputText);
+        int uniqueWordCount = findUniqueWordCount(words);
         System.out.println("Number of unique words: " + uniqueWordCount);
 
         scanner.close();
@@ -43,63 +43,39 @@ public class Main {
 
     // Find and display the most common character in the text.
     public static char findMostCommonCharacter(String text) {
-        text = text.toLowerCase();
         Map<Character, Integer> charCountMap = new HashMap<>();
-
         for (char ch : text.toCharArray()) {
             if (Character.isLetterOrDigit(ch)) {
                 charCountMap.put(ch, charCountMap.getOrDefault(ch, 0) + 1);
             }
         }
-
-        char mostCommonChar = ' ';
-        int maxCount = 0;
-
-        for (Map.Entry<Character, Integer> entry : charCountMap.entrySet()) {
-            if (entry.getValue() > maxCount) {
-                mostCommonChar = entry.getKey();
-                maxCount = entry.getValue();
-            }
-        }
-
-        return mostCommonChar;
+        return Collections.max(charCountMap.entrySet(), Map.Entry.comparingByValue()).getKey();
     }
 
     // Check and display the frequency of occurrences of a character in the text.
     public static int findCharacterFrequency(String text, char charToFind) {
-        text = text.toLowerCase();
-        charToFind = Character.toLowerCase(charToFind);
         int count = 0;
-
         for (char ch : text.toCharArray()) {
             if (ch == charToFind) {
                 count++;
             }
         }
-
         return count;
     }
 
     // Check and display the frequency of occurrences of a word in the text.
-    public static int findWordFrequency(String text, String wordToFind) {
-        text = text.toLowerCase();
-        wordToFind = wordToFind.toLowerCase();
-        String[] words = text.split("\\s+");
+    public static int findWordFrequency(String[] words, String wordToFind) {
         int count = 0;
-
         for (String word : words) {
             if (word.equals(wordToFind)) {
                 count++;
             }
         }
-
         return count;
     }
 
     // Calculate and display the number of unique words in the text.
-    public static int findUniqueWordCount(String text) {
-        text = text.toLowerCase();
-        String[] words = text.split("\\s+");
+    public static int findUniqueWordCount(String[] words) {
         Set<String> uniqueWords = new HashSet<>(Arrays.asList(words));
         return uniqueWords.size();
     }
